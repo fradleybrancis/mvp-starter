@@ -20,8 +20,9 @@ class Log extends React.Component {
   }
 
   render() {
+    var { handleLog } = this.props;
     return (
-      <form>
+      <form onSubmit={ (e) => handleLog(e, this.state) }>
         <label>
           When:
           <input type="date" name="date" onChange={this.handleInputChange} required></input>
@@ -39,7 +40,7 @@ class Log extends React.Component {
           <input type="checkbox" name="kickflip" onChange={this.handleInputChange} ></input>
         </label>
         <div>
-          <button type="submit">Log Session</button>
+          <button type="submit" >Log Session</button>
         </div>
       </form>
     )

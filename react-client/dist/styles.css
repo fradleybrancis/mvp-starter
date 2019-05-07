@@ -26,13 +26,13 @@ input, select {
 }
 
 button {
-  background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
   cursor: pointer;
   width: 100%;
+  background-color: cadetblue;
 }
 
 button:hover {
@@ -41,5 +41,14 @@ button:hover {
 
 .container {
   padding: 16px;
+  display: inline;
+}
+
+.Session {
+  border: solid;
+}
+.counter {
+  font-size: 20px;
+  display: inline;
 }
 
