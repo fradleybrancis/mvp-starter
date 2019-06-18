@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Log from './Log.jsx';
 import AllSessions from "./AllSessions.jsx";
-import DeleteSession from "./DeleteSession.jsx";
+import SimpleMap from "./SimpleMap.jsx";
 
 class App extends React.Component {
   constructor(props) {
@@ -14,6 +14,7 @@ class App extends React.Component {
     this.handleLog = this.handleLog.bind(this);
     this.displayLogs = this.displayLogs.bind(this);
     this.deleteLog = this.deleteLog.bind(this);
+    this.hideLogs = this.hideLogs.bind(this);
   }
 
   componentDidMount() {
@@ -22,7 +23,7 @@ class App extends React.Component {
         this.setState({ totalKickflips: response.data.length });
       })
       .catch(error => {
-        alert("Something done goofed");
+        alert(error);
       })
   }
 
@@ -32,8 +33,12 @@ class App extends React.Component {
       this.setState({sessions: response.data})
     })
     .catch(error => {
-      alert("something broke! WHAT DID YOU DO!?")
+      alert(error)
     })
+  }
+
+  hideLogs() {
+    this.setState({ sessions: [] })
   }
 
   deleteLog(date) {
@@ -62,19 +67,21 @@ class App extends React.Component {
       }
     })
     .catch(error => {
-      alert("something broke! WHAT DID YOU DO!?");
+      alert("something broke! WHAT DID YOU DO!?")
     })
   }
 
   render () {
     return (
-    <div>
-      <img src="https://fontmeme.com/permalink/190507/f2a41e513544ead91d23c28eaa5c0023.png"></img>
+    <React.Fragment>
+      <h1 className="header">Skate Log</h1>
       <div className="counter">{ this.state.totalKickflips } Days That You Kickflipped</div>
-      <Log handleLog={ this.handleLog }/>
-      <DeleteSession deleteLog={ this.deleteLog }/>
-      <AllSessions displayLogs={ this.displayLogs } sessions={ this.state.sessions }/>
-    </div>
+      <div id="outer">
+        <Log id="left" handleLog={ this.handleLog }/>
+        <SimpleMap id="right"/>
+      </div>
+      <AllSessions displayLogs={ this.displayLogs } hideLogs={ this.hideLogs } sessions={ this.state.sessions } deleteLog={ this.deleteLog }/>
+    </React.Fragment>
     )
   }
 }

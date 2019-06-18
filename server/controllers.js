@@ -1,15 +1,15 @@
-var { SkateLog } = require('../database-mongo');
+const { SkateLog } = require('../database-mongo');
 
 module.exports.getAll = (req, res) => {
   SkateLog.find()
     .sort([['date', -1]])
     .exec((error, logs) => {
-      if(error) {
+      if (error) {
         res.sendStatus(500);
       } else {
         res.json(logs);
       }
-    }) 
+    }); 
 }
 
 module.exports.addSession = (req, res) => {
@@ -23,7 +23,7 @@ module.exports.addSession = (req, res) => {
 }
 
 module.exports.total = (req, res) => {
-  SkateLog.find({"kickflip": true})
+  SkateLog.find({ kickflip: true })
     .exec((err, data) => {
       if (err) {
         res.sendStatus(500);
@@ -34,12 +34,11 @@ module.exports.total = (req, res) => {
 }
 
 module.exports.deleteLog = (req, res) => {
-  SkateLog.remove({ "date": req.query.date }, (error, data) => {
+  SkateLog.remove({ date: req.query.date }, (error, data) => {
   if (error) {
-        console.log(error);
-        res.sendStatus(500);
-      } else {
-        res.sendStatus(200);
-      }
-  })
+      res.sendStatus(500);
+    } else {
+      res.sendStatus(200);
+    }
+  });
 }
