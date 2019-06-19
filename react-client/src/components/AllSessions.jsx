@@ -1,8 +1,8 @@
-import React from "react";
-import Session from "./Session.jsx";
+import React from 'react';
+import Session from './Session.jsx';
 
 const AllSessions = (props) => {
-  const { displayLogs, sessions, deleteLog, hideLogs } = props
+  const { displayLogs, sessions, deleteLog, hideLogs } = props;
   return (
     <div className="container">
       <span>
@@ -18,6 +18,10 @@ const AllSessions = (props) => {
       }
     </div>
   )
+}
+
+AllSessions.defaultProps = {
+    
 }
 
 export default AllSessions;
