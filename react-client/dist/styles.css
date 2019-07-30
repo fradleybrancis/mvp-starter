@@ -5,6 +5,12 @@ form {
   height: 390px;
   left: 0;
 }
+
+.header {
+  width: 100%;
+  text-align: center;
+  background: rgb(165, 105, 173);
+}
  
 input, select {
   width: 100%;
@@ -25,10 +31,25 @@ input, select {
   background-color: cadetblue;
 }
 
+.displayDate {
+  flex: 1;
+  padding: 15px;
+  text-decoration-line: underline;
+  text-decoration-color: rgb(247, 112, 94);
+  color: rgb(41, 12, 12);
+
+}
+
 .delete {
-  position: absolute;
-  right: 15px;
-  bottom: 10px;
+  flex: 1;
+}
+
+.show {
+  flex: 1;
+}
+
+.expand {
+  flex: 1;
 }
 
 button:hover {
@@ -36,11 +57,13 @@ button:hover {
 }
 
 .container {
+  display: flex;
   padding: 16px;
   margin: auto;
 }
 
 .sessionButton {
+  flex: 1;
   margin: auto;
   width: 50%;
   border: 5px solid rgb(135, 75, 192);
@@ -48,12 +71,27 @@ button:hover {
 }
 
 .Session {
-  border: solid;
+  display: flex;
   position: relative;
   padding: 10px;
-  outline-color: black;
-  margin: 25px;
+  border-bottom-style: solid;
+  border-right-style: solid;
+  border-color: rgb(151, 151, 151);
 }
+
+.AllSessions {
+  background: rgb(239, 247, 139);
+  /* display: flex; */
+}
+
+/* .AllSessions div {
+  flex: 1;
+}
+
+.AllSessions img {
+  flex: 1;
+} */
+
 .counter {
   font-size: 20px;
   display: inline;
@@ -64,7 +102,6 @@ button:hover {
 }
 
 #left {
-  /* flex: 0 0 65%; */
   flex: auto;
 }
 
