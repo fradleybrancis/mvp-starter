@@ -1,23 +1,29 @@
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/skateLogs');
+const mongoose = require('mongoose');
+const bluebird = require('bluebird');
 
-var db = mongoose.connection;
+mongoose.Promise = bluebird;
 
-db.on('error', function(err) {
+mongoose.connect('mongodb://localhost/skateLogs', {
+  useMongoClient: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', (err) => {
   console.log('mongoose connection error', err);
 });
 
-db.once('open', function() {
+db.once('open', () => {
   console.log('mongoose connected successfully');
 });
 
-var sessionSchema = mongoose.Schema({
+const sessionSchema = mongoose.Schema({
   date: Date,
-  homies: String,
+  footy: String,
   location: String,
-  kickflip: Boolean,
+  notes: String,
 });
 
-var SkateLog = mongoose.model('logs', sessionSchema);
+const SkateLog = mongoose.model('logs', sessionSchema);
 
 module.exports.SkateLog = SkateLog;
