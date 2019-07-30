@@ -12,6 +12,8 @@ app.get('/logs', controllers.getAll);
 
 app.get('/total', controllers.total);
 
+app.get('/allCoordinates', controllers.getAllCoordinates);
+
 app.post('/logs', controllers.addSession);
 
 app.delete('/logs', controllers.deleteLog);
@@ -19,4 +21,3 @@ app.delete('/logs', controllers.deleteLog);
 app.listen(3000, () => {
   console.log('listening on port 3000');
 });
-
