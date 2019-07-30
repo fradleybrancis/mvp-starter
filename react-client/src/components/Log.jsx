@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 class Log extends React.Component {
@@ -7,10 +8,11 @@ class Log extends React.Component {
     this.state = {
       date: '',
       location: '',
-      homies: '',
-      kickflip: false,
+      file: null,
+      notes: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLog = this.handleLog.bind(this);
   }
 
   componentDidUpdate(prevProps) {
@@ -22,16 +24,43 @@ class Log extends React.Component {
     }
   }
 
+  handleLog(e) {
+    e.preventDefault();
+    const {
+      date, location, file, notes,
+    } = this.state;
+    const { updateFooty } = this.props;
+    const formData = new FormData();
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' },
+    };
+    formData.append('date', date);
+    formData.append('location', location);
+    formData.append('file', file[0]);
+    formData.append('notes', notes);
+    axios.post('/logs', formData, config)
+      .then((response) => {
+        updateFooty(response.data.Location);
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+
   handleInputChange(e) {
     const { name } = e.target;
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    let value = '';
+    if (e.target.files) {
+      value = e.target.files;
+    } else {
+      value = e.target.value;
+    }
     this.setState({ [name]: value });
   }
 
   render() {
-    const { handleLog } = this.props;
     return (
-      <form className="column" onSubmit={e => handleLog(e, this.state)}>
+      <form className="column" onSubmit={e => this.handleLog(e)}>
         <label htmlFor="when">
           When:
           <input type="date" name="date" onChange={this.handleInputChange} required />
@@ -40,13 +69,13 @@ class Log extends React.Component {
           Where:
           <input type="text" name="location" ref="location" onChange={this.handleInputChange} />
         </label>
-        <label htmlFor="homies">
-          Homies:
-          <input type="text" name="homies" onChange={this.handleInputChange} />
+        <label htmlFor="notes">
+          Notes:
+          <input type="text" name="notes" onChange={this.handleInputChange} />
         </label>
-        <label htmlFor="kickflip">
-          Did You Kickflip?
-          <input type="checkbox" name="kickflip" onChange={this.handleInputChange} />
+        <label htmlFor="footy">
+          Footy:
+          <input type="file" name="file" onChange={this.handleInputChange} />
         </label>
         <div>
           <button type="submit" id="formButton">Log Session</button>
@@ -57,7 +86,6 @@ class Log extends React.Component {
 }
 
 Log.propTypes = {
-  handleLog: PropTypes.func.isRequired,
   lat: PropTypes.number.isRequired,
   lng: PropTypes.number.isRequired,
 };

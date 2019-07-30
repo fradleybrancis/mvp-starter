@@ -10,21 +10,25 @@ class App extends React.Component {
     super(props);
     this.state = {
       sessions: [],
-      totalKickflips: 0,
+      totalSessions: 0,
       lat: 0,
       lng: 0,
+      allCoordinates: [],
+      showAllSpots: false,
+      displayedFooty: '',
+      note: '',
     };
-    this.handleLog = this.handleLog.bind(this);
     this.displayLogs = this.displayLogs.bind(this);
-    this.deleteLog = this.deleteLog.bind(this);
     this.hideLogs = this.hideLogs.bind(this);
     this.updateLocation = this.updateLocation.bind(this);
+    this.toggleVisitedSpots = this.toggleVisitedSpots.bind(this);
+    this.updateFooty = this.updateFooty.bind(this);
   }
 
   componentDidMount() {
     axios.get('/total')
       .then((response) => {
-        this.setState({ totalKickflips: response.data.length });
+        this.setState({ totalSessions: response.data });
       })
       .catch((error) => {
         console.log(error);
@@ -32,7 +36,7 @@ class App extends React.Component {
   }
 
   updateLocation(lat, lng) {
-    this.setState({ lat: lat, lng: lng });
+    this.setState({ lat, lng });
   }
 
   displayLogs() {
@@ -45,54 +49,62 @@ class App extends React.Component {
       });
   }
 
+  updateFooty(url, note) {
+    if (url.split(':')[0] !== 'https' && !note) {
+      return;
+    }
+    this.setState({ displayedFooty: url, note: note });
+  }
+
+  toggleVisitedSpots() {
+    const { showAllSpots } = this.state;
+    if (!showAllSpots) {
+      axios.get('/allCoordinates')
+        .then(response => this.setState({
+          allCoordinates: response.data,
+          showAllSpots: !showAllSpots,
+        }))
+        .catch(error => console.warn(error));
+    } else {
+      this.setState({
+        allCoordinates: [],
+        showAllSpots: !showAllSpots,
+      });
+    }
+  }
+
   hideLogs() {
     this.setState({ sessions: [] });
   }
 
-  deleteLog(date) {
-    axios.delete('/logs', { params: { date } })
-      .then(() => {
-        console.log('Log deleted');
-        window.location = window.location.href;
-      })
-      .catch((error) => {
-        console.log('Error :', error);
-        window.location = window.location.href;
-      });
-  }
-
-  handleLog(e, state) {
-    e.preventDefault();
-    axios.post('/logs', state)
-      .then(() => {
-        if (state.kickflip) {
-          console.log('Saved');
-          window.location = window.location.href;
-        } else {
-          console.log('Saved but why no kickflip?');
-          window.location = window.location.href;
-        }
-      })
-      .catch((error) => {
-        console.log('something broke! WHAT DID YOU DO!?');
-      });
-  }
-
   render() {
-    const { totalKickflips, sessions, lat, lng } = this.state;
+    const {
+      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note
+    } = this.state;
     return (
       <React.Fragment>
         <h1 className="header">Skate Log</h1>
         <div className="counter">
-          { totalKickflips }
+          { totalSessions }
           {' '}
-Days That You Kickflipped
+          Sessions Logged
         </div>
         <div id="outer">
-          <Log id="left" handleLog={this.handleLog} lat={lat} lng={lng} />
-          <SimpleMap id="right" updateLocation={this.updateLocation}/>
+          <Log id="left" handleLog={this.handleLog} lat={lat} lng={lng} updateFooty={this.updateFooty} />
+          <SimpleMap id="right" allSpots={allCoordinates} updateLocation={this.updateLocation} lat={lat} lng={lng} />
         </div>
-        <AllSessions displayLogs={this.displayLogs} hideLogs={this.hideLogs} sessions={sessions} deleteLog={this.deleteLog} />
+        <AllSessions
+          toggleVisitedSpots={this.toggleVisitedSpots}
+          showAllSpots={showAllSpots}
+          displayLogs={this.displayLogs}
+          updateFooty={this.updateFooty}
+          hideLogs={this.hideLogs}
+          sessions={sessions}
+          deleteLog={this.deleteLog}
+          updateLocation={this.updateLocation}
+          displayedFooty={displayedFooty}
+          note={note}
+        />
       </React.Fragment>
     );
   }

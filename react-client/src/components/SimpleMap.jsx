@@ -21,6 +21,9 @@ class SimpleMap extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { lng, lat } = this.state;
     const { updateLocation } = this.props;
+    if (prevProps.lat !== this.props.lat) {
+      this.setState({ lat: this.props.lat, lng: this.props.lng });
+    }
     if (prevState.lat !== lat) {
       updateLocation(lat, lng);
     }
@@ -28,7 +31,7 @@ class SimpleMap extends Component {
 
   render() {
     const { lat, lng } = this.state;
-    const { updateLocation, center, zoom } = this.props;
+    const { center, zoom, allSpots } = this.props;
     return (
       <div style={{ height: '390px', width: '50%' }}>
         <GoogleMapReact
@@ -41,11 +44,12 @@ class SimpleMap extends Component {
           yesIWantToUseGoogleMapApiInternals
           // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, places)}
         >
-          <Pin
-            lat={lat}
-            lng={lng}
-            updateLocation={updateLocation}
-          />
+          {
+            allSpots.length && allSpots.map(session => (
+              <Pin lat={session.location.split(',')[0]} lng={session.location.split(',')[1]} />
+            ))
+          }
+          <Pin lat={lat} lng={lng} />
         </GoogleMapReact>
       </div>
     );
@@ -58,15 +62,17 @@ SimpleMap.defaultProps = {
     lng: -122.421524,
   },
   zoom: 11,
+  allSpots: [],
 };
 
 SimpleMap.propTypes = {
   updateLocation: PropTypes.func.isRequired,
-  center: {
+  center: PropTypes.shape({
     lat: PropTypes.number,
     lng: PropTypes.number,
-  },
+  }),
   zoom: PropTypes.number,
+  allSpots: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default SimpleMap;

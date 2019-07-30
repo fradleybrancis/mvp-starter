@@ -1,43 +1,89 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment';
+import propTypes from 'prop-types';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faStreetView, faBoxOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 
-const Session = ({ session }) => {
-  const {
-    location, homies, date, kickflip, deleteLog,
-  } = session;
-  const grammar = str => str.slice(0, 1).toUpperCase().concat(str.slice(1));
-  return (
-    <div className="Session">
-      <div>
-        <span className="location">{ grammar(moment(date).startOf('day').fromNow()) }</span>
-        {
-          location && <span className="location">{ ` at ${location}` }</span>
-        }
-      </div>
-      {
-        homies && <div className="homies">{ homies }</div>
+class Session extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      display: false,
+    };
+
+    this.deleteLog = this.deleteLog.bind(this);
+  }
+
+  deleteLog() {
+    const { id } = this.props;
+    axios.delete('/logs', { params: { id } })
+      .then(() => {
+        window.location = window.location.href;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
+  }
+
+  displayDate() {
+    const { date } = this.props;
+    const months = 'January February March April May June July August September October November December'.split(' ');
+    for (let i = 0; i < months.length; i += 1) {
+      if (Number(date.split('-')[1]) === i + 1) {
+        return `${months[i]} ${date.split('-')[2].slice(0, 2)}, ${date.split('-')[0]}`;
       }
-      <span>
-        kickflip:
-        {
-          kickflip && <span className="homies"> &#10004; </span>
-        }
-        {
-          !kickflip && <span className="homies"> &#10008; </span>
-        }
-      </span>
-      <div>
-        <button type="button" className="delete" onClick={() => deleteLog(date)}><FontAwesomeIcon icon={faTrash} /></button>
+    }
+    return '';
+  }
+
+  render() {
+    const { display } = this.state;
+    const {
+      updateLocation, location, footy, notes, updateFooty,
+    } = this.props;
+    let hasCoordinates = false;
+    let lat = 0;
+    let lng = 0;
+    if (location && !isNaN(location.split(',')[0])) {
+      lat = Number(location.split(',')[0]);
+      lng = Number(location.split(',')[1]);
+      hasCoordinates = true;
+    }
+
+    if (display) {
+      return (
+        <div className="Session">
+          <div className="displayDate">{ this.displayDate() }</div>
+          <div className="sessionButtons">
+            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}><FontAwesomeIcon icon={faBoxOpen} /></button>
+            {
+             hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}><FontAwesomeIcon icon={faStreetView} /></button>
+            }
+            <button type="submit" className="delete" onClick={this.deleteLog}><FontAwesomeIcon icon={faTrash} /></button>
+            <button type="button" onClick={() => updateFooty(footy, notes)}><FontAwesomeIcon icon={faExternalLinkAlt} /></button>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div className="Session">
+        <div className="displayDate">{ this.displayDate() }</div>
+        <div className="sessionButtons">
+          <button type="button" className="expand" onClick={() => this.setState({ display: !display })}><FontAwesomeIcon icon={faBoxOpen} /></button>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 Session.propTypes = {
-  session: PropTypes.shape.isRequired,
+  updateLocation: propTypes.func.isRequired,
+  date: propTypes.string.isRequired,
+  location: propTypes.string,
 };
+
+// Session.defaultProps = {
+//   location: null,
+// };
 
 export default Session;
