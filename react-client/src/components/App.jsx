@@ -4,6 +4,7 @@ import axios from 'axios';
 import Log from './Log.jsx';
 import AllSessions from './AllSessions.jsx';
 import SimpleMap from './SimpleMap.jsx';
+import Modal from './Modal.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class App extends React.Component {
       lng: 0,
       allCoordinates: [],
       showAllSpots: false,
+      displayForm: false,
       displayedFooty: '',
       note: '',
     };
@@ -26,9 +28,12 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('/total')
+    axios.get('/logs')
       .then((response) => {
-        this.setState({ totalSessions: response.data });
+        this.setState({
+          totalSessions: response.data.length,
+          sessions: response.data,
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -50,10 +55,14 @@ class App extends React.Component {
   }
 
   updateFooty(url, note) {
+    if (!arguments.length) {
+      this.setState({ displayedFooty: '', note: '' });
+      return;
+    }
     if (url.split(':')[0] !== 'https' && !note) {
       return;
     }
-    this.setState({ displayedFooty: url, note: note });
+    this.setState({ displayedFooty: url, note });
   }
 
   toggleVisitedSpots() {
@@ -79,7 +88,7 @@ class App extends React.Component {
 
   render() {
     const {
-      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note
+      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note, displayForm,
     } = this.state;
     return (
       <React.Fragment>
@@ -88,23 +97,36 @@ class App extends React.Component {
           { totalSessions }
           {' '}
           Sessions Logged
+          <div className="container">
+            <button type="button" className="sessionButton" onClick={() => this.setState({ displayForm: !displayForm })}>{displayForm ? "Show Logs" : "Add Log"}</button>
+            <button type="button" className="sessionButton" onClick={this.toggleVisitedSpots}> Show / Hide Spots </button>
+          </div>
         </div>
-        <div id="outer">
-          <Log id="left" handleLog={this.handleLog} lat={lat} lng={lng} updateFooty={this.updateFooty} />
-          <SimpleMap id="right" allSpots={allCoordinates} updateLocation={this.updateLocation} lat={lat} lng={lng} />
+        {
+          displayedFooty && <Modal displayedFooty={displayedFooty} note={note} updateFooty={this.updateFooty} />
+        }
+        <div className="mainDisplay">
+          {
+            !displayForm && (
+            <AllSessions
+              toggleVisitedSpots={this.toggleVisitedSpots}
+              showAllSpots={showAllSpots}
+              displayLogs={this.displayLogs}
+              updateFooty={this.updateFooty}
+              hideLogs={this.hideLogs}
+              sessions={sessions}
+              deleteLog={this.deleteLog}
+              updateLocation={this.updateLocation}
+              displayedFooty={displayedFooty}
+              note={note}
+            />
+            )
+          }
+          {
+            displayForm && <Log id="left" handleLog={this.handleLog} lat={lat} lng={lng} updateFooty={this.updateFooty} />
+          }
+          <SimpleMap allSpots={allCoordinates} updateLocation={this.updateLocation} lat={lat} lng={lng} />
         </div>
-        <AllSessions
-          toggleVisitedSpots={this.toggleVisitedSpots}
-          showAllSpots={showAllSpots}
-          displayLogs={this.displayLogs}
-          updateFooty={this.updateFooty}
-          hideLogs={this.hideLogs}
-          sessions={sessions}
-          deleteLog={this.deleteLog}
-          updateLocation={this.updateLocation}
-          displayedFooty={displayedFooty}
-          note={note}
-        />
       </React.Fragment>
     );
   }
