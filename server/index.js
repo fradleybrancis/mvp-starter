@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, '/../react-client/dist')));
 
 app.get('/logs', controllers.getAll);
 
-app.get('/total', controllers.total);
+// app.get('/total', controllers.total);
 
 app.get('/allCoordinates', controllers.getAllCoordinates);
 

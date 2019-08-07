@@ -32,7 +32,7 @@ module.exports.getAll = (req, res) => {
       if (error) {
         res.sendStatus(500);
       } else {
-        res.json(logs);
+        res.status(200).json(logs);
       }
     });
 };
@@ -64,15 +64,15 @@ module.exports.addSession = (request, response) => {
   });
 };
 
-module.exports.total = (req, res) => {
-  SkateLog.count({}, (err, count) => {
-    if (err) {
-      res.status(400);
-    } else {
-      res.status(200).json(count);
-    }
-  });
-};
+// module.exports.total = (req, res) => {
+//   SkateLog.count({}, (err, count) => {
+//     if (err) {
+//       res.status(400);
+//     } else {
+//       res.status(200).json(count);
+//     }
+//   });
+// };
 
 module.exports.deleteLog = (req, res) => {
   SkateLog.remove({ _id: req.query.id }, (error, data) => {
