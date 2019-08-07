@@ -13,34 +13,26 @@ class SimpleMap extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lat: 0,
-      lng: 0,
+      lat: this.props.lat,
+      lng: this.props.lng,
     };
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { lng, lat } = this.state;
-    const { updateLocation } = this.props;
-    if (prevProps.lat !== this.props.lat) {
-      this.setState({ lat: this.props.lat, lng: this.props.lng });
-    }
-    if (prevState.lat !== lat) {
-      updateLocation(lat, lng);
-    }
+  _onChildClick(key, childProps) {
+    console.log(key, childProps)
   }
 
   render() {
-    const { lat, lng } = this.state;
-    const { center, zoom, allSpots } = this.props;
+    // const { lat, lng } = this.state;
+    const { center, zoom, allSpots, updateLocation, lat, lng } = this.props;
     return (
-      <div style={{ height: '390px', width: '50%' }}>
+      <div style={{ height: '450px', width: '50%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key }}
           defaultCenter={center}
           defaultZoom={zoom}
-          onChildMouseEnter={this.onChildMouseEnter}
-          onChildMouseLeave={this.onChildMouseLeave}
-          onClick={e => this.setState({ lat: e.lat, lng: e.lng })}
+          onChildClick={this._onChildClick}
+          onClick={e => updateLocation(e.lat, e.lng)}
           yesIWantToUseGoogleMapApiInternals
           // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, places)}
         >
