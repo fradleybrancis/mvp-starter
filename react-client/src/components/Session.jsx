@@ -2,7 +2,9 @@ import React from 'react';
 import propTypes from 'prop-types';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faStreetView, faBoxOpen, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTrash, faStreetView, faBoxOpen, faExternalLinkAlt,
+} from '@fortawesome/free-solid-svg-icons';
 
 class Session extends React.Component {
   constructor(props) {
