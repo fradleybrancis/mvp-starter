@@ -3,8 +3,8 @@ const bluebird = require('bluebird');
 
 mongoose.Promise = bluebird;
 
-mongoose.connect('mongodb://localhost/skateLogs', {
-  useMongoClient: true,
+mongoose.connect('mongodb+srv://brad:OkayFasho123@fradleyscluster-dcayx.mongodb.net/test', {
+  useNewUrlParser: true,
 });
 
 const db = mongoose.connection;
