@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStreetView } from '@fortawesome/free-solid-svg-icons';
-import key from '../../../hideThis.js';
+// import key from '../../../hideThis.js';
 
 const Pin = props => (
   <FontAwesomeIcon icon={faStreetView} />
@@ -18,17 +18,13 @@ class SimpleMap extends Component {
     };
   }
 
-  _onChildClick(key, childProps) {
-    console.log(key, childProps)
-  }
-
   render() {
     // const { lat, lng } = this.state;
     const { center, zoom, allSpots, updateLocation, lat, lng } = this.props;
     return (
       <div style={{ height: '450px', width: '50%' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key }}
+          bootstrapURLKeys={{ key: process.env.bootstrapURLKeys }}
           defaultCenter={center}
           defaultZoom={zoom}
           onChildClick={this._onChildClick}
