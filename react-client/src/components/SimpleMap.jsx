@@ -24,7 +24,7 @@ class SimpleMap extends Component {
     return (
       <div style={{ height: '450px', width: '50%' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: process.env.bootstrapURLKeys }}
+          bootstrapURLKeys={{ key: 'AIzaSyDRGxvLSs6S5I0HiSFhPeQrGmlYFSWqJXU' }}
           defaultCenter={center}
           defaultZoom={zoom}
           onChildClick={this._onChildClick}
