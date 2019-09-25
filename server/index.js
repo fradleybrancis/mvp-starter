@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const controllers = require('./controllers');
 
+const port = process.env.PORT || 3000;
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded());
@@ -18,6 +20,6 @@ app.post('/logs', controllers.addSession);
 
 app.delete('/logs', controllers.deleteLog);
 
-app.listen(3000, () => {
-  console.log('listening on port 3000');
+app.listen(port, () => {
+  console.log('listening on port' + port);
 });
