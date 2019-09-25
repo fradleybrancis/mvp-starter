@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack",
     "start": "node server/index.js",
     "heroku-postbuild": "npm install && npm run build"
+  },
+  "engines": {
+    "node": "12",
   },
   "author": "Bradley Francis",
   "license": "ISC",
