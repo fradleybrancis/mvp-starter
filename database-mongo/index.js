@@ -3,7 +3,7 @@ const bluebird = require('bluebird');
 
 mongoose.Promise = bluebird;
 
-mongoose.connect('mongodb+srv://brad:OkayFasho123@fradleyscluster-dcayx.mongodb.net/test', {
+mongoose.connect(`mongodb+srv://brad:${process.env.mongoPW}@fradleyscluster-dcayx.mongodb.net/test`, {
   useNewUrlParser: true,
 });
 
