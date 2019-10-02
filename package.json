@@ -6,7 +6,9 @@
   "scripts": {
     "build": "webpack",
     "start": "node server/index.js",
-    "heroku-postbuild": "npm install && npm run build"
+    "heroku-postbuild": "npm install && npm run build",
+    "server-dev": "nodemon server/index.js",
+    "client-dev": "webpack -d --watch"
   },
   "author": "Bradley Francis",
   "license": "ISC",
