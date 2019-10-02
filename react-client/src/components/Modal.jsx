@@ -7,15 +7,17 @@ export default class Modal extends React.Component {
   }
 
   componentDidMount() {
-    // creates function to exit modal on any key press
+    // creates function to exit modal on any key press or mouseclick
     const { updateFooty } = this.props;
     window.addEventListener('keyup', () => updateFooty(), false);
+    window.addEventListener('mouseup', () => updateFooty(), false);
   }
 
   componentWillUnmount() {
     // removes function when modal is closed to prevent duplication
     const { updateFooty } = this.props;
     window.removeEventListener('keyup', () => updateFooty(), false);
+    window.removeEventListener('mouseup', () => updateFooty(), false);
   }
 
   render() {
@@ -24,7 +26,7 @@ export default class Modal extends React.Component {
       <div className="modal">
         <div className="modal-main">
           <img src={displayedFooty} alt="" />
-          <p>{note}</p>
+          <div className="bottom-text">{note}</div>
         </div>
       </div>
     );
