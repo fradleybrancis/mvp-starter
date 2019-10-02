@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faTrash, faStreetView, faBoxOpen, faExternalLinkAlt,
+  faTrash, faStreetView, faBoxOpen, faExternalLinkAlt, faClipboard, faParagraph
 } from '@fortawesome/free-solid-svg-icons';
 
 class Session extends React.Component {
@@ -18,13 +18,15 @@ class Session extends React.Component {
 
   deleteLog() {
     const { id } = this.props;
-    axios.delete('/logs', { params: { id } })
-      .then(() => {
-        window.location = window.location.href;
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
+    if (window.confirm("Are you sure you want to delete this log?")) {
+      axios.delete('/logs', { params: { id } })
+        .then(() => {
+          window.location = window.location.href;
+        })
+        .catch((error) => {
+          throw new Error(error);
+        });
+    }
   }
 
   displayDate() {
@@ -55,23 +57,23 @@ class Session extends React.Component {
     if (display) {
       return (
         <div className="Session">
-          <div className="displayDate">{ this.displayDate() }</div>
+          <div className="displayDate">{this.displayDate()}</div>
           <div className="sessionButtons">
-            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}><FontAwesomeIcon icon={faBoxOpen} /></button>
+            <button type="submit" className="delete" onClick={this.deleteLog}> Delete <FontAwesomeIcon icon={faTrash} /></button>
             {
-             hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}><FontAwesomeIcon icon={faStreetView} /></button>
+              hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}> Location <FontAwesomeIcon icon={faStreetView} /></button>
             }
-            <button type="submit" className="delete" onClick={this.deleteLog}><FontAwesomeIcon icon={faTrash} /></button>
-            <button type="button" onClick={() => updateFooty(footy, notes)}><FontAwesomeIcon icon={faExternalLinkAlt} /></button>
+            <button type="button" onClick={() => updateFooty(footy, notes)}> Footage <FontAwesomeIcon icon={faExternalLinkAlt} /></button>
+            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Hide <FontAwesomeIcon icon={faBoxOpen} /></button>
           </div>
         </div>
       );
     }
     return (
       <div className="Session">
-        <div className="displayDate">{ this.displayDate() }</div>
-        <div className="sessionButtons">
-          <button type="button" className="expand" onClick={() => this.setState({ display: !display })}><FontAwesomeIcon icon={faBoxOpen} /></button>
+          <div className="displayDate">{this.displayDate()}</div>
+          <div className="sessionButtons">
+            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Show <FontAwesomeIcon icon={faBoxOpen} /></button>
         </div>
       </div>
     );
