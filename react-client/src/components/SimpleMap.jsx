@@ -3,7 +3,7 @@ import GoogleMapReact from 'google-map-react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStreetView } from '@fortawesome/free-solid-svg-icons';
-// import key from '../../../hideThis.js';
+import key from '../../../hideThis.js';
 
 const Pin = props => (
   <FontAwesomeIcon icon={faStreetView} />
@@ -24,7 +24,7 @@ class SimpleMap extends Component {
     return (
       <div style={{ height: '450px', width: '50%' }}>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyDRGxvLSs6S5I0HiSFhPeQrGmlYFSWqJXU' }}
+          bootstrapURLKeys={{ key }}
           defaultCenter={center}
           defaultZoom={zoom}
           onChildClick={this._onChildClick}
@@ -33,9 +33,9 @@ class SimpleMap extends Component {
           // onGoogleApiLoaded={({ map, maps }) => apiIsLoaded(map, maps, places)}
         >
           {
-            allSpots.length && allSpots.map(session => (
-              <Pin lat={session.location.split(',')[0]} lng={session.location.split(',')[1]} />
-            ))
+            allSpots.length && allSpots.map((session, index) => {
+              return <Pin lat={session.location.split(',')[0]} lng={session.location.split(',')[1]} key={index} />
+            })
           }
           <Pin lat={lat} lng={lng} />
         </GoogleMapReact>
