@@ -44,7 +44,7 @@ class Log extends React.Component {
       })
       .catch((error) => {
         throw new Error(error);
-      });
+      })
   }
 
   handleInputChange(e) {
@@ -67,11 +67,11 @@ class Log extends React.Component {
         </label>
         <label htmlFor="where">
           Where:
-          <input type="text" name="location" ref="location" onChange={this.handleInputChange} />
+          <input type="text" name="location" ref="location" onChange={this.handleInputChange} placeholder="Drop A Pin On The Map"/>
         </label>
         <label htmlFor="notes">
           Notes:
-          <input type="text" name="notes" onChange={this.handleInputChange} />
+          <input type="text" name="notes" onChange={this.handleInputChange} placeholder="Add A Note To Find The Session Later"/>
         </label>
         <label htmlFor="footy">
           Footy:
