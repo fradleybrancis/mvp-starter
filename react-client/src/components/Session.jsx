@@ -54,26 +54,26 @@ class Session extends React.Component {
       hasCoordinates = true;
     }
 
-    if (display) {
-      return (
-        <div className="Session">
-          <div className="displayDate">{this.displayDate()}</div>
-          <div className="sessionButtons">
-            <button type="submit" className="delete" onClick={this.deleteLog}> Delete <FontAwesomeIcon icon={faTrash} /></button>
-            {
-              hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}> Location <FontAwesomeIcon icon={faStreetView} /></button>
-            }
-            <button type="button" onClick={() => updateFooty(footy, notes)}> Footage <FontAwesomeIcon icon={faExternalLinkAlt} /></button>
-            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Hide <FontAwesomeIcon icon={faBoxOpen} /></button>
-          </div>
-        </div>
-      );
-    }
     return (
       <div className="Session">
-          <div className="displayDate">{this.displayDate()}</div>
-          <div className="sessionButtons">
-            <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Show <FontAwesomeIcon icon={faBoxOpen} /></button>
+        <img src={footy} alt="" width="40px" height="40px"/>
+        <div className="displayDate" onClick={() => this.setState({ display: !display })}>{this.displayDate()}</div>
+        <div className="sessionButtons">
+          {
+            display && <button type="submit" className="delete" onClick={this.deleteLog}> Delete <FontAwesomeIcon icon={faTrash} /></button>
+          }
+          {
+            display && hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}> Location <FontAwesomeIcon icon={faStreetView} /></button>
+          }
+          {
+            !display && <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Show <FontAwesomeIcon icon={faBoxOpen} /></button>
+          }
+          {
+            display && <button type="button" onClick={() => updateFooty(footy, notes)}> Footage <FontAwesomeIcon icon={faExternalLinkAlt} /></button>
+          }
+          {
+            display && <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Hide <FontAwesomeIcon icon={faBoxOpen} /></button>
+          }
         </div>
       </div>
     );
@@ -85,9 +85,5 @@ Session.propTypes = {
   date: propTypes.string.isRequired,
   location: propTypes.string,
 };
-
-// Session.defaultProps = {
-//   location: null,
-// };
 
 export default Session;
