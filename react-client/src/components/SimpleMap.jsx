@@ -19,14 +19,13 @@ class SimpleMap extends Component {
   }
 
   render() {
-    // const { lat, lng } = this.state;
     const { center, zoom, allSpots, updateLocation, lat, lng } = this.props;
     return (
       <div style={{ height: '450px', width: '50%' }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: 'AIzaSyDRGxvLSs6S5I0HiSFhPeQrGmlYFSWqJXU' }}
-          defaultCenter={center}
-          defaultZoom={zoom}
+          center={center}
+          zoom={zoom}
           onChildClick={this._onChildClick}
           onClick={e => updateLocation(e.lat, e.lng)}
           yesIWantToUseGoogleMapApiInternals

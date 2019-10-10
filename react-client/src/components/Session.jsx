@@ -43,7 +43,7 @@ class Session extends React.Component {
   render() {
     const { display } = this.state;
     const {
-      updateLocation, location, footy, notes, updateFooty,
+      updateLocation, location, footy, notes, updateFooty, centerAndZoom,
     } = this.props;
     let hasCoordinates = false;
     let lat = 0;
@@ -63,7 +63,7 @@ class Session extends React.Component {
             display && <button type="submit" className="delete" onClick={this.deleteLog}> Delete <FontAwesomeIcon icon={faTrash} /></button>
           }
           {
-            display && hasCoordinates && <button type="button" className="show" onClick={() => updateLocation(lat, lng)}> Location <FontAwesomeIcon icon={faStreetView} /></button>
+            display && hasCoordinates && <button type="button" className="show" onClick={() => centerAndZoom(lat, lng)}> Location <FontAwesomeIcon icon={faStreetView} /></button>
           }
           {
             !display && <button type="button" className="expand" onClick={() => this.setState({ display: !display })}> Show <FontAwesomeIcon icon={faBoxOpen} /></button>

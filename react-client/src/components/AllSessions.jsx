@@ -4,7 +4,7 @@ import Session from './Session.jsx';
 
 const AllSessions = (props) => {
   const {
-    displayLogs, sessions, hideLogs, updateLocation, toggleVisitedSpots, updateFooty, displayedFooty, note,
+    displayLogs, sessions, hideLogs, updateLocation, toggleVisitedSpots, updateFooty, displayedFooty, note, centerAndZoom,
   } = props;
   return (
     <div className="AllSessions">
@@ -19,6 +19,7 @@ const AllSessions = (props) => {
               key={index}
               updateFooty={updateFooty}
               updateLocation={updateLocation}
+              centerAndZoom={centerAndZoom}
             />
           ))
         }

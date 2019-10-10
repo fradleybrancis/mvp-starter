@@ -15,6 +15,11 @@ class App extends React.Component {
       totalSessions: 0,
       lat: 0,
       lng: 0,
+      center: {
+        lat: 37.770055,
+        lng: -122.421524,
+      },
+      zoom: 10,
       allCoordinates: [],
       showAllSpots: false,
       displayForm: false,
@@ -27,6 +32,7 @@ class App extends React.Component {
     this.updateLocation = this.updateLocation.bind(this);
     this.toggleVisitedSpots = this.toggleVisitedSpots.bind(this);
     this.updateFooty = this.updateFooty.bind(this);
+    this.centerAndZoom = this.centerAndZoom.bind(this);
   }
 
   componentDidMount() {
@@ -72,6 +78,13 @@ class App extends React.Component {
 
   updateLocation(lat, lng) {
     this.setState({ lat, lng });
+  }
+
+  centerAndZoom(lat, lng) {
+    const { zoom } = this.state;
+    let scope = zoom;
+    scope > 11 ? scope = 11 : scope = zoom + 1;
+    this.setState({ lat, lng, center: { lat, lng }, zoom: scope });
   }
 
   displayLogs() {
@@ -120,7 +133,7 @@ class App extends React.Component {
 
   render() {
     const {
-      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note, displayForm,
+      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note, displayForm, center, zoom,
     } = this.state;
     return (
       <React.Fragment>
@@ -152,6 +165,7 @@ class App extends React.Component {
               sessions={sessions}
               deleteLog={this.deleteLog}
               updateLocation={this.updateLocation}
+              centerAndZoom={this.centerAndZoom}
               displayedFooty={displayedFooty}
               note={note}
             />
@@ -160,7 +174,7 @@ class App extends React.Component {
           {
             displayForm && <Log id="left" handleLog={this.handleLog} lat={lat} lng={lng} updateFooty={this.updateFooty} />
           }
-          <SimpleMap allSpots={allCoordinates} updateLocation={this.updateLocation} lat={lat} lng={lng} />
+          <SimpleMap allSpots={allCoordinates} updateLocation={this.updateLocation} lat={lat} lng={lng} center={center} zoom={zoom} />
         </div>
       </React.Fragment>
     );
