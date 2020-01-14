@@ -15,6 +15,7 @@ const AllSessions = (props) => {
               location={session.location}
               footy={session.footy}
               notes={session.notes}
+              fileName={session.fileName}
               id={session._id}
               key={index}
               updateFooty={updateFooty}

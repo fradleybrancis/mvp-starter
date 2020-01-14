@@ -17,9 +17,9 @@ class Session extends React.Component {
   }
 
   deleteLog() {
-    const { id } = this.props;
+    const { id, fileName } = this.props;
     if (window.confirm("Are you sure you want to delete this log?")) {
-      axios.delete('/logs', { params: { id } })
+      axios.delete('/logs', { params: { id, fileName } })
         .then(() => {
           window.location = window.location.href;
         })
