@@ -22,6 +22,7 @@ const sessionSchema = mongoose.Schema({
   footy: String,
   location: String,
   notes: String,
+  fileName: String,
 });
 
 const SkateLog = mongoose.model('logs', sessionSchema);
