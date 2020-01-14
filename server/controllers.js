@@ -54,6 +54,7 @@ module.exports.addSession = (request, response) => {
         location: location[0],
         footy: data.Location,
         notes: notes[0],
+        fileName: fileName,
       }, (err) => {
         if (err) throw new Error(err);
       });
@@ -64,24 +65,23 @@ module.exports.addSession = (request, response) => {
   });
 };
 
-// module.exports.total = (req, res) => {
-//   SkateLog.count({}, (err, count) => {
-//     if (err) {
-//       res.status(400);
-//     } else {
-//       res.status(200).json(count);
-//     }
-//   });
-// };
-
 module.exports.deleteLog = (req, res) => {
-  SkateLog.remove({ _id: req.query.id }, (error, data) => {
-    if (error) {
-      res.sendStatus(500);
-    } else {
-      res.sendStatus(200);
-    }
-  });
+  let params = {
+    Bucket: process.env.S3_BUCKET, 
+    Key: req.query.fileName
+   };
+   s3.deleteObject(params, function(err, data) {
+     if (err) console.log(err, err.stack); // an error occurred
+     else {
+       SkateLog.deleteOne({ _id: req.query.id }, (error, data) => {
+         if (error) {
+           res.sendStatus(500);
+         } else {
+           res.sendStatus(200);
+         }
+       });
+     }
+   });
 };
 
 module.exports.getAllCoordinates = (req, res) => {
