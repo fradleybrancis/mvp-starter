@@ -4,6 +4,8 @@ const fs = require('fs');
 const fileType = require('file-type');
 const bluebird = require('bluebird');
 const { SkateLog } = require('../database-mongo');
+const Sharp = require('sharp');
+
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -44,21 +46,33 @@ module.exports.addSession = (request, response) => {
     try {
       const { date, location, notes } = fields;
       const { path } = files.file[0];
-      const buffer = fs.readFileSync(path);
-      const type = fileType(buffer);
-      const timestamp = Date.now().toString();
-      const fileName = `bucketFolder/${timestamp}-lg`;
-      const data = await uploadFile(buffer, fileName, type);
-      await SkateLog.create({
-        date: date[0],
-        location: location[0],
-        footy: data.Location,
-        notes: notes[0],
-        fileName: fileName,
-      }, (err) => {
-        if (err) throw new Error(err);
-      });
-      return response.status(200).send(data);
+      await Sharp(path)
+        .resize(null, 250, {
+          fit: 'inside',
+          withoutEnlargement: true,
+        })
+        .toBuffer()
+        .then(async buffer => {
+          const type = fileType(buffer);
+          const timestamp = Date.now().toString();
+          const fileName = `bucketFolder/${timestamp}-lg`;
+          const data = await uploadFile(buffer, fileName, type);
+          await SkateLog.create({
+            date: date[0],
+            location: location[0],
+            footy: data.Location,
+            notes: notes[0],
+            fileName: fileName,
+          }, (err) => {
+            if (err) throw new Error(err);
+          });
+          return response.status(200).send(data);
+        })
+        .catch(err => {
+          if (err) throw new Error(err);
+        })
+      // const buffer = fs.readFileSync(path);
+      // for resizing look into Jimp npm package
     } catch (error) {
       return response.status(400).send(error);
     }
