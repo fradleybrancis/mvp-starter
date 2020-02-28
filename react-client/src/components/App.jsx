@@ -35,9 +35,9 @@ class App extends React.Component {
     this.centerAndZoom = this.centerAndZoom.bind(this);
   }
 
-  componentDidMount() {
-    this.displayLogs();
-  }
+  // componentDidMount() {
+  //   this.displayLogs();
+  // }
 
   componentDidUpdate(prevProps, prevState) {
     const { searchTerm, allSessions } = this.state;
@@ -46,34 +46,33 @@ class App extends React.Component {
       let currentList = [];
       // Variable to hold the filtered list before putting into state
       let newList = [];
-  
+
       // If the search bar isn't empty
-      if (searchTerm !== "") {
-          // Assign the original list to currentList
+      if (searchTerm !== '') {
+        // Assign the original list to currentList
         currentList = allSessions;
-  
-          // Use .filter() to determine which items should be displayed
-          // based on the search terms
-        newList = currentList.filter(item => {
-              // change current item to lowercase
-        const lc = item.notes.toLowerCase();
-              // change search term to lowercase
-        const filter = searchTerm.toLowerCase();
-              // check to see if the current list item includes the search term
-              // If it does, it will be added to newList. Using lowercase eliminates
-              // issues with capitalization in search terms and search content
-        return lc.includes(filter);
-          });
+
+        // Use .filter() to determine which items should be displayed
+        // based on the search terms
+        newList = currentList.filter((item) => {
+          // change current item to lowercase
+          const lc = item.notes.toLowerCase();
+          // change search term to lowercase
+          const filter = searchTerm.toLowerCase();
+          // check to see if the current list item includes the search term
+          // If it does, it will be added to newList. Using lowercase eliminates
+          // issues with capitalization in search terms and search content
+          return lc.includes(filter);
+        });
       } else {
-          // If the search bar is empty, set newList to original task list
+        // If the search bar is empty, set newList to original task list
         newList = allSessions;
       }
       // Set the filtered state based on what our rules added to newList
       this.setState({
-        sessions: newList
+        sessions: newList,
       });
     }
-
   }
 
   updateLocation(lat, lng) {
@@ -84,7 +83,9 @@ class App extends React.Component {
     const { zoom } = this.state;
     let scope = zoom;
     scope > 11 ? scope = 11 : scope = zoom + 1;
-    this.setState({ lat, lng, center: { lat, lng }, zoom: scope });
+    this.setState({
+      lat, lng, center: { lat, lng }, zoom: scope,
+    });
   }
 
   displayLogs() {
@@ -112,11 +113,11 @@ class App extends React.Component {
     const { showAllSpots } = this.state;
     if (!showAllSpots) {
       axios.get('/allCoordinates')
-        .then(response => this.setState({
+        .then((response) => this.setState({
           allCoordinates: response.data,
           showAllSpots: !showAllSpots,
         }))
-        .catch(error => console.warn(error));
+        .catch((error) => console.warn(error));
     } else {
       this.setState({
         allCoordinates: [],
@@ -129,11 +130,10 @@ class App extends React.Component {
     this.setState({ sessions: [] });
   }
 
-  
 
   render() {
     const {
-      totalSessions, sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note, displayForm, center, zoom,
+      sessions, lat, lng, allCoordinates, showAllSpots, displayedFooty, note, displayForm, center, zoom,
     } = this.state;
     return (
       <React.Fragment>
@@ -142,12 +142,16 @@ class App extends React.Component {
           <div>
             <label>
               Find Sessions
-              <input type="text" placeholder="Ex: Brad at SoMa Skatepark" onChange={(e)=> this.setState({ searchTerm: e.target.value })}/>
+              <input type="text" placeholder="Ex: Brad at SoMa Skatepark" onChange={(e) => this.setState({ searchTerm: e.target.value })} />
             </label>
           </div>
           <div className="container">
-            <button type="button" className="sessionButton" onClick={() => this.setState({ displayForm: !displayForm })}>{displayForm ? "Show Logs" : "Add Log"}</button>
-            <button type="button" className="sessionButton" onClick={this.toggleVisitedSpots}> { showAllSpots ? "Hide Markers" : "Show Markers" } </button>
+            <button type="button" className="sessionButton" onClick={() => this.setState({ displayForm: !displayForm })}>{displayForm ? 'Show Logs' : 'Add Log'}</button>
+            <button type="button" className="sessionButton" onClick={this.toggleVisitedSpots}>
+              {' '}
+              { showAllSpots ? 'Hide Markers' : 'Show Markers' }
+              {' '}
+            </button>
           </div>
         </div>
         {

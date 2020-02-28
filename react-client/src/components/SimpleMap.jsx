@@ -63,3 +63,7 @@ SimpleMap.propTypes = {
 };
 
 export default SimpleMap;
+
+// const mapStateToProps = (state) => ({
+//   center: , zoom, allSpots, updateLocation, lat, lng
+// });

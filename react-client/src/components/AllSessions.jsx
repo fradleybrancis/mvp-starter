@@ -1,6 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import Session from './Session.jsx';
+import { connect } from 'react-redux';
 
 const AllSessions = (props) => {
   const {
@@ -40,4 +41,11 @@ AllSessions.defaultProps = {
   sessions: [],
 };
 
-export default AllSessions;
+// export default AllSessions;
+
+const mapStateToProps = (state) => {
+  const { sessions } = state;
+  return { sessions };
+};
+
+export default connect(mapStateToProps)(AllSessions);

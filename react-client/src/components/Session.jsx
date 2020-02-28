@@ -1,6 +1,8 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import axios from 'axios';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrash, faStreetView, faBoxOpen, faExternalLinkAlt, faClipboard, faParagraph
@@ -87,3 +89,5 @@ Session.propTypes = {
 };
 
 export default Session;
+
+// const mapDispatchToProps = (dispatch) => (bindActionCreators())
